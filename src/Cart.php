@@ -101,6 +101,11 @@ class Cart
         if ($content->has($cartItem->rowId)) {
             $cartItem->qty += $content->get($cartItem->rowId)->qty;
         }
+        
+        if ($cartItem->qty <= 0) {
+            $this->remove($cartItem->rowId);
+            return;
+        }
 
         $content->put($cartItem->rowId, $cartItem);
         
