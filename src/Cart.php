@@ -25,7 +25,7 @@ class Cart
 
     /**
      * Instance of the event dispatcher.
-     * 
+     *
      * @var \Illuminate\Contracts\Events\Dispatcher
      */
     private $events;
@@ -101,15 +101,15 @@ class Cart
         if ($content->has($cartItem->rowId)) {
             $cartItem->qty += $content->get($cartItem->rowId)->qty;
         }
-        
+
         if ($cartItem->qty <= 0) {
             $this->remove($cartItem->rowId);
             return;
         }
 
         $content->put($cartItem->rowId, $cartItem);
-        
-        $this->events->fire('cart.added', $cartItem);
+
+        $this->events->dispatch('cart.added', $cartItem);
 
         $this->session->put($this->instance, $content);
 
@@ -153,7 +153,7 @@ class Cart
             $content->put($cartItem->rowId, $cartItem);
         }
 
-        $this->events->fire('cart.updated', $cartItem);
+        $this->events->dispatch('cart.updated', $cartItem);
 
         $this->session->put($this->instance, $content);
 
@@ -174,7 +174,7 @@ class Cart
 
         $content->pull($cartItem->rowId);
 
-        $this->events->fire('cart.removed', $cartItem);
+        $this->events->dispatch('cart.removed', $cartItem);
 
         $this->session->put($this->instance, $content);
     }
@@ -365,7 +365,7 @@ class Cart
             'content' => serialize($content)
         ]);
 
-        $this->events->fire('cart.stored');
+        $this->events->dispatch('cart.stored');
     }
 
     /**
@@ -395,7 +395,7 @@ class Cart
             $content->put($cartItem->rowId, $cartItem);
         }
 
-        $this->events->fire('cart.restored');
+        $this->events->dispatch('cart.restored');
 
         $this->session->put($this->instance, $content);
 
